@@ -6,16 +6,17 @@ import math
 class PositionalEmbedding(nn.Module):
     def __init__(self, embed_size, seq_len=1000):
         super(PositionalEmbedding, self).__init__()
+        # 位置序列
         position = torch.arange(seq_len).float().unsqueeze(1)  # [max_len, 1]
         div_term = torch.exp(torch.arange(0, embed_size, 2) * -(math.log(10000.0) / embed_size))
-        # 单双数
+        # 单双数处理，且位置编码不学习，保证通用性
         pe = torch.zeros((seq_len, embed_size), dtype=torch.float32)
         pe.require_grad = False
         pe[:, 0::2] = torch.sin(position * div_term)
         pe[:, 1::2] = torch.cos(position * div_term)
         # 便于批处理
         pe = pe.unsqueeze(0)
-        # 注册为一个缓冲区，这样它不会被视为模型的参数，但仍然会在模型保存和加载时被包含。
+        # 注册为一个缓冲区，这样它不会被视为模型的参数，但仍然会在模型保存和加载时被包含
         self.register_buffer('pe', pe)
 
     def forward(self, x):

@@ -48,5 +48,5 @@ if __name__ == "__main__":
 
     for batch in dataloader:
         lookback, pred = batch  # 解包
-        print("Lookback shape:", lookback.shape)
-        print("Prediction shape:", pred.shape)
+        # print("Lookback shape:", lookback.shape)
+        # print("Prediction shape:", pred.shape)

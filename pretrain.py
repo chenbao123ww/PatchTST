@@ -10,6 +10,12 @@ from torch.utils.data import DataLoader
 import argparse
 import swanlab
 
+n_feature_map = {
+    "weather": 21,
+    "traffic": 862,
+    "electricity": 321
+}
+
 def model_select(name):
     if name == "PatchTST":
         pretrain_model = PatchTST
@@ -19,10 +25,11 @@ def model_select(name):
 
 def main(args):
     # 设备设置
+    n_feature = n_feature_map[args.dataset]
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # 导入数据
     csv_path = f"./data/{args.dataset}/{args.dataset}.csv"
-    dataset = TimeSeriesDataset(csv_path, args.n_feature, args.seq_len, args.pred_len)
+    dataset = TimeSeriesDataset(csv_path, n_feature, args.seq_len, args.pred_len)
     # 可复现数据集
     torch.manual_seed(42)
     data_loader = DataLoader(dataset, batch_size=32, shuffle=True)
@@ -30,7 +37,7 @@ def main(args):
     pretrain_model = model_select(args.model_name)
     model = pretrain_model(
         seq_len=args.seq_len,
-        n_feature=args.n_feature,
+        n_feature=n_feature,
         patch_len=args.patch_len,
         stride=args.stride,
         embed_size=args.embed_size,
@@ -60,8 +67,8 @@ def main(args):
             lookback, pred = lookback.to(device), pred.to(device)
             optimizer.zero_grad()
             origin, output, mask, _ = model(lookback)
-            loss = criterion(origin, output, mask)
-            mae_loss = mae_recorder(origin, output, mask)
+            loss = criterion(origin, output, mask, device=device)
+            mae_loss = mae_recorder(origin, output, mask, device=device)
             loss.backward()
             optimizer.step()
             if step % 10 == 0:
@@ -74,7 +81,8 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train PatchTST model")
-    parser.add_argument("--dataset", type=str, default="weather", help="Dataset name")
+    parser.add_argument("--dataset", type=str, choices=["weather", "traffic", "electricity"],
+                        default="weather", help="Dataset name")
     parser.add_argument("--model_name", type=str, choices=["PatchTST", "GlobalPatchTST"], default="GlobalPatchTST",
                         help="Model name, options: PatchTST, GlobalPatchTST")
     parser.add_argument("--n_feature", type=int, default=21,

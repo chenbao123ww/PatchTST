@@ -7,7 +7,7 @@ def masked_mse_loss(pred, target, mask=None, device="cpu"):
     loss = F.mse_loss(pred, target, reduction='none').to(device)
 
     mask_num = mask.sum() if mask is not None else 0
-
+    # 考虑无mask的情况，监督与自监督通用
     if mask is not None:
         mask = mask.unsqueeze(-1)       # [batch_size, n_feature, num_patch, 1]
         loss = loss * mask.float().to(device)
@@ -23,7 +23,7 @@ def masked_mae_loss(pred, target, mask=None, device="cpu"):
     loss = torch.abs(pred - target).to(device)
 
     mask_num = mask.sum() if mask is not None else 0
-
+    # 考虑无mask的情况，监督与自监督通用
     if mask is not None:
         mask = mask.unsqueeze(-1)       # [batch_size, n_feature, num_patch, 1]
         loss = loss * mask.float().to(device)
