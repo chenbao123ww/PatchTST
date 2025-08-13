@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bbb124d8-0d53-4e11-bc47-01bf923d20e3" name="变更" comment="" />
+    <list default="true" id="bbb124d8-0d53-4e11-bc47-01bf923d20e3" name="变更" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/metric.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/metric.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -217,7 +220,7 @@
       <workItem from="1754672436500" duration="704000" />
       <workItem from="1754674295235" duration="20185000" />
       <workItem from="1754765481191" duration="18864000" />
-      <workItem from="1755016685826" duration="13796000" />
+      <workItem from="1755016685826" duration="15356000" />
     </task>
     <servers />
   </component>
